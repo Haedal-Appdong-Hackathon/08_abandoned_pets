@@ -1,3 +1,5 @@
+<!-- public/witness-register.html -->
+
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -14,7 +16,7 @@
             color: #fff;
         }
 
-        #lostPetForm {
+        #witnessPetForm {
             max-width: 400px;
             margin: auto;
             background-color: #fff;
@@ -23,7 +25,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
-        #petForm label {
+        #witnessForm label {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -31,14 +33,14 @@
             color: #000;
         }
 
-        #petForm label input,
-        #petForm label textarea {
+        #witnessForm label input,
+        #witnessForm label textarea {
             width: 60%;
             margin-left: 10px;
             color: #000;
         }
 
-        #petForm button {
+        #witnessForm button {
             width: 100%;
             padding: 10px;
             font-size: 16px;
@@ -48,17 +50,12 @@
             cursor: pointer;
         }
 
-        #lostPetsList {
+        #witnessPetsList {
             list-style: none;
             padding: 0;
-            display: none;
         }
 
-        #notificationArea {
-            margin-top: 20px;
-        }
-
-        #confirmationWindow {
+        #witnessConfirmationWindow {
             display: none;
             position: fixed;
             top: 50%;
@@ -71,11 +68,11 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
 
-        #confirmationWindow p {
+        #witnessConfirmationWindow p {
             margin-bottom: 10px;
         }
 
-        #confirmationWindow button {
+        #witnessConfirmationWindow button {
             width: 100%;
             padding: 10px;
             font-size: 16px;
@@ -91,67 +88,85 @@
 
     <h1 style="text-align: center; color: #fff;">목격 정보 등록 서비스</h1>
 
-    <div id="lostPetForm">
+    <div id="witnessPetForm">
         <h2 style="text-align: center; color: #000;">목격 정보 등록</h2>
-        <form id="petForm">
-            <label for="petName">지역/발견한 곳:
-                <input type="text" id="petName" name="petName" required>
+        <form id="witnessForm">
+            <label for="witnessPetName">지역/발견한 곳:
+                <input type="text" id="witnessPetName" name="witnessPetName" required>
             </label>
 
-            <label for="animalType">동물 이름/종류:
-                <input type="text" id="animalType" name="animalType" required>
+            <label for="witnessAnimalType">동물 이름/종류:
+                <input type="text" id="witnessAnimalType" name="witnessAnimalType" required>
             </label>
 
-            <label for="ownerName">연락처:
-                <input type="text" id="ownerName" name="ownerName" required>
+            <label for="witnessOwnerName">연락처:
+                <input type="text" id="witnessOwnerName" name="witnessOwnerName" required>
             </label>
 
-            <label for="contactNumber">특징:
-                <textarea id="contactNumber" name="contactNumber" rows="4" required></textarea>
+            <label for="witnessContactNumber">특징:
+                <textarea id="witnessContactNumber" name="witnessContactNumber" rows="4" required></textarea>
             </label>
 
-            <label for="photo">사진 첨부:
-                <input type="file" id="photo" name="photo" accept="image/*">
+            <label for="witnessPhoto">사진 첨부:
+                <input type="file" id="witnessPhoto" name="witnessPhoto" accept="image/*">
             </label>
 
             <button type="button" onclick="registerWitness()">목격 정보 등록</button>
         </form>
     </div>
 
-    <ul id="lostPetsList"></ul>
+    <ul id="witnessPetsList"></ul>
 
-    <div id="confirmationWindow">
-        <p id="confirmationMessage" style="color: #fff;">목격 정보가 정상적으로 등록되었습니다.</p>
-        <button onclick="closeConfirmationWindow()">확인</button>
+    <div id="witnessConfirmationWindow">
+        <p id="witnessConfirmationMessage" style="color: #fff;">목격 정보가 정상적으로 등록되었습니다.</p>
+        <button onclick="closeWitnessConfirmationWindow()">확인</button>
     </div>
 
     <script>
-        function registerWitness() {
-            const petForm = document.getElementById('petForm');
-            const petName = petForm.elements['petName'].value;
-            const animalType = petForm.elements['animalType'].value;
-            const ownerName = petForm.elements['ownerName'].value;
-            const contactNumber = petForm.elements['contactNumber'].value;
+        async function registerWitness() {
+            const witnessForm = document.getElementById('witnessForm');
+            const witnessPetName = witnessForm.elements['witnessPetName'].value;
+            const witnessAnimalType = witnessForm.elements['witnessAnimalType'].value;
+            const witnessOwnerName = witnessForm.elements['witnessOwnerName'].value;
+            const witnessContactNumber = witnessForm.elements['witnessContactNumber'].value;
 
-            const lostPetsList = document.getElementById('lostPetsList');
-            const listItem = document.createElement('li');
-            listItem.textContent = `${petName} (${animalType}) - ${ownerName} (${contactNumber})`;
-            lostPetsList.appendChild(listItem);
+            const response = await fetch('/api/registerWitness', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ witnessPetName, witnessAnimalType, witnessOwnerName, witnessContactNumber }),
+            });
 
-            const confirmationWindow = document.getElementById('confirmationWindow');
-            confirmationWindow.style.display = 'block';
+            const result = await response.json();
 
-            petForm.reset();
+            alert(result.message); // 등록 결과 메시지 표시
 
-            lostPetsList.style.display = 'none';
+            witnessForm.reset();
+            fetchWitnessPets(); // 목격 정보 갱신
         }
 
-        function closeConfirmationWindow() {
-            const confirmationWindow = document.getElementById('confirmationWindow');
-            confirmationWindow.style.display = 'none';
+        function closeWitnessConfirmationWindow() {
+            const witnessConfirmationWindow = document.getElementById('witnessConfirmationWindow');
+            witnessConfirmationWindow.style.display = 'none';
+        }
+
+        async function fetchWitnessPets() {
+            const response = await fetch('/api/getWitnessPets');
+            const witnessPets = await response.json();
+
+            const witnessPetsList = document.getElementById('witnessPetsList');
+            witnessPetsList.innerHTML = '';
+
+            witnessPets.forEach(pet => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${pet.witnessPetName} (${pet.witnessAnimalType}) - ${pet.witnessOwnerName} (${pet.witnessContactNumber})`;
+                witnessPetsList.appendChild(listItem);
+            });
+
+            witnessPetsList.style.display = 'block';
         }
     </script>
 
 </body>
-
 </html>
