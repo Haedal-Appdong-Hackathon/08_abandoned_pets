@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실종 동물 목격 등록 서비스</title>
+    <style>
+        /* 간단한 스타일링 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #d2b48c;
+        }
+
+        #lostPetForm {
+            max-width: 400px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #petForm label {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #petForm label input,
+        #petForm label textarea {
+            width: 60%;
+            margin-left: 10px;
+        }
+
+        #petForm button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #d2b48c;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        #lostPetsList {
+            list-style: none;
+            padding: 0;
+            display: none;
+        }
+
+        #notificationArea {
+            margin-top: 20px;
+        }
+
+        #confirmationWindow {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #d2b48c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #confirmationWindow p {
+            margin-bottom: 10px;
+        }
+
+        #confirmationWindow button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center; color: #3e2723;">목격 정보 등록 서비스</h1>
+
+    <div id="lostPetForm">
+        <h2 style="text-align: center; color: #000;">목격 정보 등록</h2>
+        <form id="petForm">
+            <label for="petName">지역/발견한 곳:
+                <input type="text" id="petName" name="petName" required>
+            </label>
+
+            <label for="animalType">동물 이름/종류:
+                <input type="text" id="animalType" name="animalType" required>
+            </label>
+
+            <label for="ownerName">연락처:
+                <input type="text" id="ownerName" name="ownerName" required>
+            </label>
+
+            <label for="contactNumber">특징:
+                <textarea id="contactNumber" name="contactNumber" rows="4" required></textarea>
+            </label>
+
+            <label for="photo">사진 첨부:
+                <input type="file" id="photo" name="photo" accept="image/*">
+            </label>
+
+            <button type="button" onclick="registerWitness()">목격 정보 등록</button>
+        </form>
+    </div>
+
+    <ul id="lostPetsList"></ul>
+
+    <div id="confirmationWindow">
+        <p id="confirmationMessage" style="color: #fff;">목격 정보가 정상적으로 등록되었습니다.</p>
+        <button onclick="closeConfirmationWindow()">확인</button>
+    </div>
+
+    <script>
+        function registerWitness() {
+            const petForm = document.getElementById('petForm');
+            const petName = petForm.elements['petName'].value;
+            const animalType = petForm.elements['animalType'].value;
+            const ownerName = petForm.elements['ownerName'].value;
+            const contactNumber = petForm.elements['contactNumber'].value;
+
+            const lostPetsList = document.getElementById('lostPetsList');
+            const listItem = document.createElement('li');
+            listItem.textContent = `${petName} (${animalType}) - ${ownerName} (${contactNumber})`;
+            lostPetsList.appendChild(listItem);
+
+            // 확인 창 보이기
+            const confirmationWindow = document.getElementById('confirmationWindow');
+            confirmationWindow.style.display = 'block';
+
+            // 폼 초기화
+            petForm.reset();
+
+            // 리스트 표시
+            lostPetsList.style.display = 'none';
+        }
+
+        function closeConfirmationWindow() {
+            // 확인 창 숨기기
+            const confirmationWindow = document.getElementById('confirmationWindow');
+            confirmationWindow.style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
