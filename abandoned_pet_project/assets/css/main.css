@@ -2433,7 +2433,8 @@ input, select, textarea {
 /* Table */
 
 	.table-wrapper {
-		-webkit-overflow-scrolling: touch;
+overflow-scrolling: touch;
+-webkit-overflow-scrolling: touch;
 		overflow-x: auto;
 	}
 

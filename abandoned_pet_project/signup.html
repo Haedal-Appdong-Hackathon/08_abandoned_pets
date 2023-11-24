@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            color: #3e2723;
+            text-align: center;
+            padding: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+    <link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div style="font-family: 'Gowun Dodum', sans-serif;">    
+    <br>
+    <br>
+    <header>
+        <h1>회원가입 페이지</h1>
+    </header>
+    
+    <!-- Header -->
+					<header id="header" class="alt">
+						<a href="index.html" class="logo"><strong>도화지</strong> <span style="color:  white">이영인ㅣ오수현ㅣ주선대ㅣ김우성</span></a>
+					</header>
+
+				
+    <br>
+    <br>
+    <center>
+    <form id="signupForm" onsubmit="submitSignupForm(event)">
+        <label for="username">아이디:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">비밀번호:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="confirmPassword">비밀번호 확인:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        
+        <br>
+        <button type="submit">회원가입</button>
+    </form>
+        </center>
+
+    <script>
+        function submitSignupForm(event) {
+            event.preventDefault();
+
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+                return;
+            }
+
+
+            alert('회원가입이 완료되었습니다.');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+    </script>
+    <script src="signup.js"></script>
+        </div>
+</body>
+</html>
