@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kakao Maps Marker Example</title>
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5dfc839bbd99b3dd7a2d7b10ebabd8a9"></script>
+    <style>
+        .custom-infowindow {
+            font-family: 'Arial', sans-serif; 
+            font-size: 12px; 
+            color: #333; 
+            max-width: 600px;
+            padding: 15px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var container = document.getElementById('map');
+
+            var options = {
+                center: new kakao.maps.LatLng(36, 127),
+                level: 12
+            };
+
+            var map = new kakao.maps.Map(container, options);
+
+            // 마커 정보 배열
+            var markers = [
+                { position: new kakao.maps.LatLng(37.535117, 127.139971), title: '강동리본센터', address: '서울 강동구 양재대로81길 73', phone: '0100-'},
+                { position: new kakao.maps.LatLng(37.774366, 127.046787), title: '한국동물구조관리협회야생동물구조센터', address: '경기 양주시 남면 감악산로 63-37' },
+                { position: new kakao.maps.LatLng(37.563264, 126.908919), title: '서울동물복지센터', address: '서울특별시 마포구 매봉산로 31' },
+                { position: new kakao.maps.LatLng(36.4588151, 127.383038), title: '대전동물보호센터', address: '대전 유성구 금남구즉로 1234'},
+                { position: new kakao.maps.LatLng(37.8460409, 127.4992017), title: '가평균유기동물보호소', address: '경기도 가평군 가평읍 아랫마장길 59'},
+                { position: new kakao.maps.LatLng(37.649524, 126.8698545), title: '고양시동물보호센터', address: '경기도 고양시 덕양구 고양대로 1695'},
+                { position: new kakao.maps.LatLng(37.3743247, 126.7428967), title:'시흥동물누리보호센터', address:'경기도 시흥시 뒷방울길 218'},
+                { position: new kakao.maps.LatLng(35.1775729, 128.9169185), title:'(사)하얀비둘기', address:'부산광역시 강서구 제도로 726'},
+                { position: new kakao.maps.LatLng(35.8640022, 128.735939), title:'대구유기동물보호협회', address:'대구광역시 동구 금강로 151-13'},
+                { position: new kakao.maps.LatLng(35.7779066, 128.8854647), title:'경산시유기동물보호소', address:'경상북도 경산시 용성면 사양지길 95'},
+                { position: new kakao.maps.LatLng(36.2033833, 128.3701538), title:'구미시 동물보호센터', address:'경상북도 구미시 해평면 낙동대로 2206'},
+                { position: new kakao.maps.LatLng(36.9034483, 128.7719184), title:'봉화군유기동물보호소', address:'경상북도 봉화군 봉성면 농업인길 24'},
+                { position: new kakao.maps.LatLng(36.4357259, 129.3575903), title:'영덕유기동물보호센터', address:'경상북도 영덕군 영덕읍 구미2길 14-1'},
+                { position: new kakao.maps.LatLng(34.8837076, 128.5739898), title:'거제시유기동물보호소', address:'경상남도 거제시 사등면 두동로1길 109'},
+                { position: new kakao.maps.LatLng(34.9969909, 128.3264233), title:'고성군유기동물보호소', address:'경상남도 고성군 고성읍 남해안대로 2829-60'},
+                { position: new kakao.maps.LatLng(34.9043794, 128.4044143), title:'통영시동물보호센터', address:'경상남도 통영시 광도면 전두1길 9-8'},
+                { position: new kakao.maps.LatLng(35.0789761, 127.7691111), title:'하동군유기동물보호소', address:'경상남도 하동군 적량면 한옥정길 90'},
+                { position: new kakao.maps.LatLng(), title:'대한동물사랑협회', address:'전라남도 순천시 상사면 민속마을길 978'},
+                { position: new kakao.maps.LatLng(), title:'영광동물보호센터', address:'전라남도 영광군 불갑면 함영로 2755-48'},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+                { position: new kakao.maps.LatLng(), title:'', address:''},
+
+
+
+
+
+
+            ];
+            markers.forEach(function(markerInfo) {
+                var marker = new kakao.maps.Marker({
+                    position: markerInfo.position,
+                    map: map
+                });
+
+                kakao.maps.event.addListener(marker, 'click', function() {
+                    var infowindowContent = '<div class="custom-infowindow">' +
+                                            '   <strong>상호명:</strong> ' + markerInfo.title + '<br>' +
+                                            '   <strong>주소:</strong> ' + markerInfo.address + '<br>' +
+                                            '   <strong>전화번호:</strong> ' + markerInfo.phone + '<br>' +
+                                            '</div>';
+                    var infowindow = new kakao.maps.InfoWindow({
+                        content: infowindowContent,
+                        removable: true
+                    });
+                    infowindow.open(map, marker);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="map" style="width:1500px;height:800px;"></div>
+</body>
+</html>
