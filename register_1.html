@@ -1,3 +1,5 @@
+<!-- public/register.html -->
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -47,43 +49,6 @@
             border: none;
             cursor: pointer;
         }
-
-        #lostPetsList {
-            list-style: none;
-            padding: 0;
-            display: none;
-        }
-
-        #notificationArea {
-            margin-top: 20px;
-        }
-
-        #confirmationWindow {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #001f3f;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        #confirmationWindow p {
-            margin-bottom: 10px;
-            color: #fff;
-        }
-
-        #confirmationWindow button {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #fff;
-            color: #001f3f;
-            border: none;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -117,37 +82,27 @@
         </form>
     </div>
 
-    <ul id="lostPetsList"></ul>
-
-    <div id="confirmationWindow">
-        <p id="confirmationMessage" style="color: #fff;">목격 정보가 정상적으로 등록되었습니다.</p>
-        <button onclick="closeConfirmationWindow()">확인</button>
-    </div>
-
     <script>
-        function registerWitness() {
+        async function registerWitness() {
             const petForm = document.getElementById('petForm');
             const petName = petForm.elements['petName'].value;
             const animalType = petForm.elements['animalType'].value;
             const ownerName = petForm.elements['ownerName'].value;
             const contactNumber = petForm.elements['contactNumber'].value;
 
-            const lostPetsList = document.getElementById('lostPetsList');
-            const listItem = document.createElement('li');
-            listItem.textContent = `${petName} (${animalType}) - ${ownerName} (${contactNumber})`;
-            lostPetsList.appendChild(listItem);
+            const response = await fetch('/api/registerWitness', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ petName, animalType, ownerName, contactNumber }),
+            });
 
-            const confirmationWindow = document.getElementById('confirmationWindow');
-            confirmationWindow.style.display = 'block';
+            const result = await response.json();
+
+            alert(result.message);
 
             petForm.reset();
-
-            lostPetsList.style.display = 'none';
-        }
-
-        function closeConfirmationWindow() {
-            const confirmationWindow = document.getElementById('confirmationWindow');
-            confirmationWindow.style.display = 'none';
         }
     </script>
 
