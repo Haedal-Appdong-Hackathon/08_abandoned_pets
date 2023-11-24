@@ -1,0 +1,81 @@
+/* Reset 기본 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 하단 메뉴 바 스타일 */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+}
+
+nav ul {
+    list-style: none; /* 목록 기호 제거 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+nav ul li {
+    display: inline; /* 항목을 가로로 배치 */
+    margin: 0 10px; /* 좌우 여백 추가 */
+}
+
+nav ul li a {
+    color: white; /* 링크 텍스트 색상 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+    font-weight: bold; /* 글꼴 두껍게 */
+}
+
+/* 입양 섹션 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+    color: #333;
+}
+.imgSize {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 1px solid #ddd;
+}
+.card-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+}
+.card {
+    width: 300px;
+    height: 400px;
+    border: 1px solid green;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.card ul {
+    list-style: none;
+    padding: 10px;
+}
+.card li {
+    margin-bottom: 5px;
+    color: #555;
+}
