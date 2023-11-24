@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kakao Maps Marker Example</title>
+    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=3e0434b5baec1088628d25b1c7909da9"></script>
+    <style>
+        .custom-infowindow {
+            font-family: 'Arial', sans-serif; 
+            font-size: 12px; 
+            color: #333; 
+            max-width: 600px;
+            padding: 15px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var container = document.getElementById('map');
+
+            var options = {
+                center: new kakao.maps.LatLng(36, 129),
+                level: 12
+            };
+
+            var map = new kakao.maps.Map(container, options);
+
+            // 마커 정보 배열
+            var markers = [
+                { position: new kakao.maps.LatLng(37.535117, 127.139971), title: '강동리본센터', address: '서울 강동구 양재대로81길 73'},
+                { position: new kakao.maps.LatLng(37.774366, 127.046787), title: '한국동물구조관리협회야생동물구조센터', address: '경기 양주시 남면 감악산로 63-37' },
+                { position: new kakao.maps.LatLng(37.563264, 126.908919), title: '서울동물복지센터', address: '서울특별시 마포구 매봉산로 31' },
+                { position: new kakao.maps.LatLng(36.4588151, 127.383038), title: '대전동물보호센터', address: '대전 유성구 금남구즉로 1234'},
+                { position: new kakao.maps.LatLng(37.8460409, 127.4992017), title: '가평균유기동물보호소', address: '경기도 가평군 가평읍 아랫마장길 59'},
+                { position: new kakao.maps.LatLng(37.649524, 126.8698545), title: '고양시동물보호센터', address: '경기도 고양시 덕양구 고양대로 1695'},
+                { position: new kakao.maps.LatLng(37.3743247, 126.7428967), title:'시흥동물누리보호센터', address:'경기도 시흥시 뒷방울길 218'},
+                { position: new kakao.maps.LatLng(35.1775729, 128.9169185), title:'(사)하얀비둘기', address:'부산광역시 강서구 제도로 726'},
+                { position: new kakao.maps.LatLng(35.8640022, 128.735939), title:'대구유기동물보호협회', address:'대구광역시 동구 금강로 151-13'},
+
+                { position: new kakao.maps.LatLng(35.2298924, 126.8853047), title:'두손너에게', address:'광주광역시 북구 지야길 2 (지야동)'},
+                { position: new kakao.maps.LatLng(35.2224503, 126.8816669), title:'광주동물보호소', address:'광주광역시 북구 본촌마을길 27 (본촌동) 광주광역시 동물보호소'},
+                { position: new kakao.maps.LatLng(36.9891746, 127.5984478), title:'금왕동물병원', address:'충청북도 음성군 금왕읍 대금로 1498 (금왕읍) 금왕동물병원'},
+                { position: new kakao.maps.LatLng(37.0169463, 128.3013362), title:'단양군유기동물보호소', address:'충청북도 단양군 매포읍 우덕리 910번지'},
+                { position: new kakao.maps.LatLng(36.5904075, 127.3656018), title:'반려동물보호센터', address:'충청북도 청주시 흥덕구 강내면 서부로 411-55 (강내면)'},
+                { position: new kakao.maps.LatLng(37.084145, 128.2150526), title:'제천시 동물보호센터', address:'충청북도 제천시 금성면 적성로8길 51 (금성면)'},
+                { position: new kakao.maps.LatLng(36.8471706, 127.6086338), title:'증편 가정견 훈련소', address:'충청북도 증평군 도안면 입장길 239'},
+                { position: new kakao.maps.LatLng(36.484821, 127.7177238), title:'최상오동물병원', address:'충청북도 보은군 보은읍 보은로 119-1 (보은읍)'},
+                { position: new kakao.maps.LatLng(37.0079961, 127.8496533), title:'충주시동물보호센터', address:'충청북도 충주시 중앙탑면 일곱실길 70 (중앙탑면)'},
+                { position: new kakao.maps.LatLng(36.2806997, 127.241021), title:'계롱시유기동물보호소', address:'충청남도 계룡시 엄사면 천마로 12'},
+                { position: new kakao.maps.LatLng(36.493239, 127.0991901), title:'공주시 동물보호소', address:'충청남도 공주시 우성면 내산목천길 52-15'},
+                { position: new kakao.maps.LatLng(36.578842, 126.7055573), title:'금일동물보호센터', address:'충청남도 홍성군 홍동면 충절로 625 (홍동면)'},
+                { position: new kakao.maps.LatLng(36.184403, 127.058055), title:'논산시 동물보호센터', address:'충청남도 논산시 계백로665번길 100 (등화동) 논산시 동물보호센터'},
+                { position: new kakao.maps.LatLng(36.9340868, 126.5961366), title:'당진시동물보호소', address:'충청남도 당진시 고대면 연동로 30-6 (고대면)'},
+                { position: new kakao.maps.LatLng(36.345575, 126.591599), title:'보령길고양이보호협회', address:'충청남도 보령시 남대천로 91 (대천동) 상가동 201호'},
+                { position: new kakao.maps.LatLng(36.720868, 126.414122), title:'서산시 동물보호센터', address:'충청남도 서산시 인지면 무학재1길 99'},
+                { position: new kakao.maps.LatLng(36.1795195, 126.7723767), title:'서천군유기동물보호소', address:'충청남도 서천군 마산면 한마로 1189-19'},
+                { position: new kakao.maps.LatLng(36.798388, 126.982447), title:'아산동물복지지원센터', address:'충청남도 아산시 환경공원로 158 (배미동)'},
+                { position: new kakao.maps.LatLng(36.681035, 126.852155), title:'예산동물복지지원센터', address:'충청남도 예산군 예산읍 아리랑로 236 지하1층'},
+                { position: new kakao.maps.LatLng(36.098809, 127.4916703), title:'월드동물병원', address:'충청남도 금산군 금산읍 비단로 102 103호'},
+                { position: new kakao.maps.LatLng(36.78336, 127.1644902), title:'천안시유기동물보호소', address:'충청남도 천안시 동남구 충절로 437 (삼룡동)'},
+                { position: new kakao.maps.LatLng(36.471165, 126.831395), title:'청양보호소', address:'충청남도 청양군 대치면 청산로 446-17 (대치면)'},
+                { position: new kakao.maps.LatLng(36.755763,126.2946278), title:'최동물병원', address:'충청남도 태안군 태안읍 남문리 504-6'},
+                { position: new kakao.maps.LatLng(34.9270803, 127.4098868), title:'대한동물사랑협회', address:'전라남도 순천시 상사면 민속마을길 978'},
+                { position: new kakao.maps.LatLng(35.2032409, 126.4990587), title:'영광동물보호센터', address:'전라남도 영광군 불갑면 함영로 2755-48'},
+                { position: new kakao.maps.LatLng(34.624503, 126.777897), title:'강진군 유기견 보호소', address:'전라남도 강진군 강진읍 초지길 109-62 (강진읍, 강진군상하수도사업소)'},
+                { position: new kakao.maps.LatLng(34.570156,127.340716), title:'고흥군임시보호소', address:'전라남도 고흥군 포두면 우주로 607 (포두면, 소매점)'},
+                { position: new kakao.maps.LatLng(34.987546, 127.576566), title:'광양시 임시보호소', address:'전라남도 광양시 봉강면 인덕로 1169-20 (봉강면) 지곡리 864-24'},
+                { position: new kakao.maps.LatLng(35.2223167, 127.4587694), title:'구례군동물보호센터', address:'전라남도 구례군 용방면 용방로 64-11'},
+                { position: new kakao.maps.LatLng(35.048244, 126.781228), title:'나주유기동물보호센터', address:'전라남도 나주시 산포면 내기3길 71-43 [*미고시]'},
+                { position: new kakao.maps.LatLng(35.358587, 127.001814), title:'담양군 동물보호센터', address:'전라남도 담양군 용면 시암골로 280-57 (용면) :용면 두장리 21번지'},
+                { position: new kakao.maps.LatLng(34.927072, 127.409893), title:'대한동물사랑협회', address:'전라남도 순천시 상사면 민속마을길 978 (상사면) '},
+                { position: new kakao.maps.LatLng(34.8534508, 126.4304691), title:'목포시유기동물보호소', address:'전라남도 무안군 삼향읍 석매길 21-3'},
+                { position: new kakao.maps.LatLng(35.0177427, 126.478274), title:'무안군유기동물보호소', address:'전라남도 무안군 무안읍 면주길 99'},
+                { position: new kakao.maps.LatLng(34.8262232, 127.0597972), title:'보성유기동물보호센터', address:'전라남도 보성군 노동면 노동천동길 221'},
+                { position: new kakao.maps.LatLng(35.8615148,127.1149457), title:'21세기동물병원', address:'전라북도 전주시 덕진구 송천동1가 626-42'},
+                { position: new kakao.maps.LatLng(35.960893, 126.8164035), title:'군산유기동물보호센터', address:'전라북도 군산시 대야면 보덕안정길 108-20'},
+                { position: new kakao.maps.LatLng(35.8192043, 127.1483654), title:'동부동물병원', address:'전라북도 전주시 완산구 경원동1가 3-10'},
+                { position: new kakao.maps.LatLng(35.8048641, 127.1471336), title:'박영재동물병원', address:'전라북도 전주시 완산구 전주천서로 111 (서서학동)'},
+                { position: new kakao.maps.LatLng(35.665915, 126.735940), title:'부안군 동물보호센터', address:'전라북도 부안군 주산면 주산로 369 부안군 동물보호센터'},
+                { position: new kakao.maps.LatLng(35.828460, 127.115583), title:'서산동물병원', address:'전라북도 전주시 완산구 서신동 831-4'},
+                { position: new kakao.maps.LatLng(35.4370469, 127.0418922), title:'순창유기동물보호소', address:'전라북도 순창군 구림면 삭골길 56-1'},
+                { position: new kakao.maps.LatLng(35.8255107, 127.165323), title:'아프리카동물병원', address:'전라북도 전주시 덕진구 인후동1가 928-1'},
+                { position: new kakao.maps.LatLng(35.941684, 127.1900685), title:'완주군유기동물보호소', address:''},
+                { position: new kakao.maps.LatLng(35.824331, 126.994841), title:'전북말산업복합센터', address:'전라북도 김제시 용지면 금백로 571-39 (용지면) 전북말산업복합센터'},
+                { position: new kakao.maps.LatLng(35.5912514, 126.8738258), title:'정읍시 동물보호소', address:'전라북도 정읍시 2산단5길 37-1 (하북동)'},
+                { position: new kakao.maps.LatLng(35.7803081, 127.4646619), title:'진안군유기동물보호소', address:'전라북도 진안군 진안읍 예리길 36 .'},
+                { position: new kakao.maps.LatLng(35.4089525, 127.386684), title:'청원동물병원', address:'전라북도 남원시 죽항동 278번지'},
+                { position: new kakao.maps.LatLng(35.4066432, 127.3755454), title:'하나동물병원', address:'전라북도 남원시 왕정동 67'},
+                { position: new kakao.maps.LatLng(33.4555301, 126.5892907), title:'제주 동물보호센터', address:'제주특별자치도 제주시 첨단동길 184-14 (용강동)'},
+                { position: new kakao.maps.LatLng(33.474351, 126.583322), title:'제주에니멀119(주)', address:'제주특별자치도 제주시 아봉로 503-1 (용강동)'},
+                { position: new kakao.maps.LatLng(37.6989045, 128.8293345), title:'강릉시 동물사랑센터', address:'강원도 강릉시 성산면 내맬길 172'},
+                { position: new kakao.maps.LatLng(38.3502768, 128.4693552), title:'고성군임시보호소', address:'강원특별자치도 고성군 간성읍 오탑길 358-34'},
+                { position: new kakao.maps.LatLng(37.485002,129.119027), title:'동해시유기동물보호소', address:'강원도 동해시 대동로 159-13 (송정동, 동해시유기동물보호소)'},
+                { position: new kakao.maps.LatLng(37.436875, 129.079319), title:'삼척시동물보호센터', address:'강원도 삼척시 미로면 동안로 86-45'},
+                { position: new kakao.maps.LatLng(38.1691586, 128.5993541), title:'속초시유기동물보호소', address:'강원도 속초시 하도문길 103 (대포동)'},
+                { position: new kakao.maps.LatLng(38.050925, 128.046808), title:'양구군유기동물보호소', address:'강원도 양구군 국토정중앙면 삼팔선로 680 유기동물보호소'},
+                { position: new kakao.maps.LatLng(38.0202571, 128.6426649), title:'양양군유기동물보호소', address:'강원도 양양군 손양면 동막골길 115-35 .'},
+                { position: new kakao.maps.LatLng(37.1686101, 128.476878), title:'영월군위탁동물보호소', address:'강원도 영월군 영월읍 덕포우회길 329'},
+                { position: new kakao.maps.LatLng(37.4160476, 127.911915), title:'원주유기동물보호센터', address:'강원도 원주시 호저면 칠봉로 110-6'},
+                { position: new kakao.maps.LatLng(38.3487704, 128.4339134), title:'유기견임시보호소', address:'강원도 고성군 간성읍 꽃내마루길 53-49'},
+                { position: new kakao.maps.LatLng(35.7779066, 128.8854647), title:'경산시유기동물보호소', address:'경상북도 경산시 용성면 사양지길 95'},
+                { position: new kakao.maps.LatLng(36.2033833, 128.3701538), title:'구미시 동물보호센터', address:'경상북도 구미시 해평면 낙동대로 2206'},
+                { position: new kakao.maps.LatLng(36.9034483, 128.7719184), title:'봉화군유기동물보호소', address:'경상북도 봉화군 봉성면 농업인길 24'},
+                { position: new kakao.maps.LatLng(36.4357259, 129.3575903), title:'영덕유기동물보호센터', address:'경상북도 영덕군 영덕읍 구미2길 14-1'},
+                { position: new kakao.maps.LatLng(35.892732, 129.238572), title:'경주동물사랑보호센터', address:'경상북도 경주시 천북면 천북로 8-4 경주시 동물사랑보호센터'},
+                { position: new kakao.maps.LatLng(36.0839725, 128.11882235), title:'김천시 동물보호센터', address:'경상북도 김천시 조마로 2128 (양천동)'},
+                { position: new kakao.maps.LatLng(36.0943174, 128.4245315), title:'반려동물 입양센터', address:'경상북도 구미시 인동22길 43-4 (진평동)'},
+                { position: new kakao.maps.LatLng(36.3438186, 128.130741), title:'상주시 동물보호센터', address:'경상북도 상주시 청리면 남상주로 1205-59'},   
+                { position: new kakao.maps.LatLng(35.920754, 128.394203), title:'성주유기동물보호센터', address:'경상북도 성주군 선남면 선노로 522 (선남면)'},
+                { position: new kakao.maps.LatLng(36.6880361, 129.1130503), title:'영양군유기동물보호센터', address:'경상북도 영양군 영양읍 달구터길 85'},
+                { position: new kakao.maps.LatLng(35.991038, 128.926142), title:'영천유기동물보호센터', address:'경상북도 영천시 천문로 622-13 (오미동, 영천시농업기술센터)'},
+                { position: new kakao.maps.LatLng(37.47188, 130.876531), title:'울릉군농업기술센터', address:'경상북도 울릉군 울릉읍 신리길 68 (울릉읍, 울릉도축장)'},
+                { position: new kakao.maps.LatLng(34.883727,128.5739898), title:'거제시유기동물보호소', address:'경상남도 거제시 사등면 두동로1길 109 (사등면, 한국자원재생공사폐비닐적재장) 거제시유기동물보호소'},
+                { position: new kakao.maps.LatLng(34.996677, 128.326270), title:'고성군유기동물보호소', address:'경상남도 고성군 고성읍 남해안대로 2829-60 고성군농업기술센터 동물보호센터'},         
+                { position: new kakao.maps.LatLng(34.749725, 128.494524), title:'고양이보호분양센터', address:'경상남도 통영시 한산면 호두1길 351 공공형 고양이 보호분양센터'},         
+                { position: new kakao.maps.LatLng(35.1195002, 128.4681868), title:'마산유기동물보호소', address:'경상남도 창원시 마산합포구 진북면 지산2길 139-112 226-19'},         
+                { position: new kakao.maps.LatLng(35.2965282, 128.2807673), title:'만하농장', address:'경상남도 의령군 의령읍 남강로 485-75'},         
+                { position: new kakao.maps.LatLng(35.4077027, 128.8797321), title:'밀양시동물보호센터', address:'경상남도 밀양시 삼랑진읍 천태로 472 (삼랑진읍)'},         
+                { position: new kakao.maps.LatLng(35.0375531, 128.0672397), title:'사천시 동물보호센터', address:'경상남도 사천시 용현면 진삼로 902 사천시농업기술센터'},         
+                { position: new kakao.maps.LatLng(35.319917, 129.030923), title:'양산시', address:'경상남도 양산시 동면 석산리 392 양산시농업기술센터'}, 
+                { position: new kakao.maps.LatLng(34.9043794, 128.4044143), title:'통영시동물보호센터', address:'경상남도 통영시 광도면 전두1길 9-8'},
+                { position: new kakao.maps.LatLng(35.0789761, 127.7691111), title:'하동군유기동물보호소', address:'경상남도 하동군 적량면 한옥정길 90'},         
+
+
+
+
+
+
+
+
+            ];
+            markers.forEach(function(markerInfo) {
+                var marker = new kakao.maps.Marker({
+                    position: markerInfo.position,
+                    map: map
+                });
+
+                kakao.maps.event.addListener(marker, 'click', function() {
+                    var infowindowContent = '<div class="custom-infowindow">' +
+                                            '   <strong>상호명:</strong> ' + markerInfo.title + '<br>' +
+                                            '   <strong>주소:</strong> ' + markerInfo.address + '<br>' +
+                                            '   <strong>전화번호:</strong> ' + markerInfo.phone + '<br>' +
+                                            '</div>';
+                    var infowindow = new kakao.maps.InfoWindow({
+                        content: infowindowContent,
+                        removable: true
+                    });
+                    infowindow.open(map, marker);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="map" style="width:1500px;height:800px;"></div>
+</body>
+</html>
