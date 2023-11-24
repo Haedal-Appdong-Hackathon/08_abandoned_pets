@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Board</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="header">
+      <h1>자유 게시판</h1>
+      <!--글 작성 버튼-->
+      <button class="write" id="writeBtn">글쓰기</button>
+    </div>
+    <!--글 작성하기-->
+    <div class="write-form hidden" id="writeForm">
+        <i class="fas fa-times" id="closeModal"></i>
+        <form class="form-example" onsubmit="event.preventDefault();savePost();" autocomplete="off" action="/server" method="get">
+            <div class="form-title">
+              <label for="postTitle">제목: </label>
+              <input type="text" name="postTitle" id="postTitle" maxlength="20" required oninput="countLength(20, this)">
+            </div>
+            <div class="form-writer">
+                <label for="postWriter">작성자: </label>
+                <input type="text" name="postWriter" id="postWriter" maxlength="20" required oninput="countLength(20, this)">
+              </div>
+            <div class="form-text">
+              <textarea id="postText" placeHolder="write what you want" rows="10" required> </textarea>
+            </div>
+            <div class="form-save">
+              <input type="submit" value="SAVE" id="saveBtn" class="save">
+            </div>
+        </form>
+    </div>
+    <div class="overlay hidden" id="overlay"></div>
+    <div class="read-form hidden" id="readForm">
+      <i class="fas fa-times" id="closeRead"></i>
+      <div class="read-container">
+        <div class="read-title" id="readTitle"></div>
+        <div class="read-writer" id="readWriter"></div>
+      </div>   
+      <div class="read-zone">
+        <div class="read-text" id="readText"></div>
+      </div>
+      
+      
+    </div> 
+    <!--글 목록-->
+    <table class="text-list" id="textList">
+        <!-- <tr class="table-header">
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성 시간</th>
+        </tr> -->
+    </table>
+    <script src="script.js"></script>
+</body>
+</html>
+
+<!-- 
+  list : 모든 게시물 출력
+  read : 입력 내용 보기
+  delete : 
+  update : 수정
+  form : 저장
+ -->
