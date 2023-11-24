@@ -79,3 +79,10 @@ h1 {
     margin-bottom: 5px;
     color: #555;
 }
+.card img {
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover img {
+    transform: scale(1.1); /* 확대 비율 조정 가능 */
+}
