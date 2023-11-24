@@ -1,0 +1,199 @@
+<!-- public/witness-register.html -->
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실종 동물 목격 등록 서비스</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100;300;400;500;700&display=swap">
+    <style>
+        body {
+            font-family: 'Gothic A1', sans-serif;
+            margin: 20px;
+            background-color: #001f3f;
+            color: #fff;
+        }
+
+        #witnessPetForm {
+            max-width: 400px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #witnessForm label {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        #witnessForm label input,
+        #witnessForm label textarea {
+            width: 60%;
+            margin-left: 10px;
+            color: #000;
+        }
+
+        #witnessForm button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #001f3f;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        #witnessPetsList {
+            list-style: none;
+            padding: 0;
+        }
+
+        #witnessConfirmationWindow {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #001f3f;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #witnessConfirmationWindow p {
+            margin-bottom: 10px;
+        }
+
+        #witnessConfirmationWindow button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
+
+<body>
+    
+    <!-- Header -->
+					<header id="header" class="alt">
+						<a href="index.html" class="logo"><strong>도화지</strong> <span>이영인ㅣ오수현ㅣ주선대ㅣ김우성</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="landing.html">Landing</a></li>
+							<li><a href="generic.html">Generic</a></li>
+							<li><a href="elements.html">Elements</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<li><a href="#" class="button primary fit">Get Started</a></li>
+							<li><a href="#" class="button fit">Log In</a></li>
+						</ul>
+					</nav>
+    
+    <br>
+    <br>
+    
+    <h1 style="text-align: center; color: #fff;">목격 정보 등록 서비스</h1>
+
+    <div id="witnessPetForm">
+        <h2 style="text-align: center; color: #000;">목격 정보 등록</h2>
+        <form id="witnessForm">
+            <label for="witnessPetName">지역/발견한 곳:
+                <input type="text" id="witnessPetName" name="witnessPetName" required style="background-color: lightgray">
+            </label>
+
+            <label for="witnessAnimalType">동물 이름/종류:
+                <input type="text" id="witnessAnimalType" name="witnessAnimalType" required style="background-color: lightgray">
+            </label>
+
+            <label for="witnessOwnerName">연락처:
+                <input type="text" id="witnessOwnerName" name="witnessOwnerName" required style="background-color: lightgray">
+            </label>
+
+            <label for="witnessContactNumber">특징:
+                <textarea id="witnessContactNumber" name="witnessContactNumber" rows="4" required style="background-color: lightgray"></textarea>
+            </label>
+
+            <label for="witnessPhoto">사진 첨부:
+                <input type="file" id="witnessPhoto" name="witnessPhoto" accept="image/*">
+            </label>
+
+            <button type="button" onclick="registerWitness()">목격 정보 등록</button>
+        </form>
+    </div>
+
+    <ul id="witnessPetsList"></ul>
+
+    <div id="witnessConfirmationWindow">
+        <p id="witnessConfirmationMessage" style="color: #fff;">목격 정보가 정상적으로 등록되었습니다.</p>
+        <button onclick="closeWitnessConfirmationWindow()">확인</button>
+    </div>
+
+    <script>
+        async function registerWitness() {
+            const witnessForm = document.getElementById('witnessForm');
+            const witnessPetName = witnessForm.elements['witnessPetName'].value;
+            const witnessAnimalType = witnessForm.elements['witnessAnimalType'].value;
+            const witnessOwnerName = witnessForm.elements['witnessOwnerName'].value;
+            const witnessContactNumber = witnessForm.elements['witnessContactNumber'].value;
+
+            const response = await fetch('/api/registerWitness', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ witnessPetName, witnessAnimalType, witnessOwnerName, witnessContactNumber }),
+            });
+
+            const result = await response.json();
+
+            alert(result.message); // 등록 결과 메시지 표시
+
+            witnessForm.reset();
+            fetchWitnessPets(); // 목격 정보 갱신
+        }
+
+        function closeWitnessConfirmationWindow() {
+            const witnessConfirmationWindow = document.getElementById('witnessConfirmationWindow');
+            witnessConfirmationWindow.style.display = 'none';
+        }
+
+        async function fetchWitnessPets() {
+            const response = await fetch('/api/getWitnessPets');
+            const witnessPets = await response.json();
+
+            const witnessPetsList = document.getElementById('witnessPetsList');
+            witnessPetsList.innerHTML = '';
+
+            witnessPets.forEach(pet => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${pet.witnessPetName} (${pet.witnessAnimalType}) - ${pet.witnessOwnerName} (${pet.witnessContactNumber})`;
+                witnessPetsList.appendChild(listItem);
+            });
+
+            witnessPetsList.style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
