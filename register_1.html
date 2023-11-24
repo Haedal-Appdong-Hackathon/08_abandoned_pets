@@ -8,7 +8,8 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #d2b48c;
+            background-color: #001f3f;
+            color: #fff;
         }
 
         #lostPetForm {
@@ -18,6 +19,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            color: #001f3f;
         }
 
         #petForm label {
@@ -25,19 +27,21 @@
             flex-direction: row;
             align-items: center;
             margin-bottom: 10px;
+            color: #001f3f;
         }
 
         #petForm label input,
         #petForm label textarea {
             width: 60%;
             margin-left: 10px;
+            color: #001f3f;
         }
 
         #petForm button {
             width: 100%;
             padding: 10px;
             font-size: 16px;
-            background-color: #d2b48c;
+            background-color: #001f3f;
             color: #fff;
             border: none;
             cursor: pointer;
@@ -59,7 +63,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #d2b48c;
+            background-color: #001f3f;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -67,6 +71,7 @@
 
         #confirmationWindow p {
             margin-bottom: 10px;
+            color: #fff;
         }
 
         #confirmationWindow button {
@@ -74,7 +79,7 @@
             padding: 10px;
             font-size: 16px;
             background-color: #fff;
-            color: #000;
+            color: #001f3f;
             border: none;
             cursor: pointer;
         }
@@ -82,10 +87,10 @@
 </head>
 <body>
 
-    <h1 style="text-align: center; color: #3e2723;">실종 동물 알림 서비스</h1>
+    <h1 style="text-align: center; color: #fff;">실종 동물 알림 서비스</h1>
 
     <div id="lostPetForm">
-        <h2 style="text-align: center; color: #000;">실종 동물 등록</h2>
+        <h2 style="text-align: center; color: #001f3f;">실종 동물 등록</h2>
         <form id="petForm">
             <label for="petName">지역:
                 <input type="text" id="petName" name="petName" required>
@@ -131,19 +136,15 @@
             listItem.textContent = `${petName} (${animalType}) - ${ownerName} (${contactNumber})`;
             lostPetsList.appendChild(listItem);
 
-            // 확인 창 보이기
             const confirmationWindow = document.getElementById('confirmationWindow');
             confirmationWindow.style.display = 'block';
 
-            // 폼 초기화
             petForm.reset();
 
-            // 리스트 표시
             lostPetsList.style.display = 'none';
         }
 
         function closeConfirmationWindow() {
-            // 확인 창 숨기기
             const confirmationWindow = document.getElementById('confirmationWindow');
             confirmationWindow.style.display = 'none';
         }
